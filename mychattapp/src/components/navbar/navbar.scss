@@ -1,0 +1,107 @@
+@import "../../style.scss";
+
+
+.navbar {
+    @include themify($themes) {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        height: 50px;
+        border-bottom: 1px solid themed("border");
+        position: sticky;
+        top: 0px;
+        background-color: themed("bg");
+        color: themed("textColor");
+        z-index: 11111;
+
+        @include shortmobile {
+            flex-direction: column;
+            width: 100%;
+            padding: 10px 5px;
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+
+
+            @include mobile {
+
+                background-color: themed("bg");
+                width: 100%;
+
+            }
+
+            span {
+                font-weight: bold;
+                font-size: 20px;
+                color: themed("logo");
+            }
+
+            .search {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-radius: 5px;
+                border-bottom: 1px solid themed("border");
+                padding: 5px;
+
+                input {
+                    border: none;
+                    width: 500px;
+                    background-color: transparent;
+                    color: themed("textColor");
+
+                    @include mobile {
+                        display: none;
+                    }
+
+                    @include tablet {
+                        width: 200px;
+                    }
+                }
+            }
+
+
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: themed("bg");
+
+
+            @include mobile {
+                display: none;
+                background-color: themed("bg");
+            }
+
+            .user {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+
+                @include tablet {
+                    display: none;
+                }
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+
+                span {}
+            }
+
+
+        }
+    }
+
+}
