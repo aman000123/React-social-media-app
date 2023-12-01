@@ -15,25 +15,22 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axious";
+import { toast } from 'react-toastify'
 
 const Post = ({ post }) => {
 
     const [commentOpen, setCommentOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
+    const [shareOpen, setShareOpen] = useState(false)
 
 
     const { currentUser } = useContext(AuthContext)
 
-    const [shareOpen, setShareOpen] = useState(false)
-
     const { isLoading, error, data } = useQuery(['likes', post.id], () =>
         makeRequest.get("/likes?postid=" + post.id).then((res) => {
             console.log("res.data for loading get likes", res.data)
-
             return res.data
         })
-
-
     )
 
     //console.log("data for likes", data?.length)
@@ -45,13 +42,9 @@ const Post = ({ post }) => {
 
         if (liked) return makeRequest.delete('/likes?postid=' + post.id);
         return makeRequest.post('/likes', { postid: post.id });
-
-
-
     }, {
         onSuccess: () => {
             //invalidate and refetch data
-
             //in useQuery our query name is posts
             queryClient.invalidateQueries(["likes"])
         }
@@ -59,30 +52,39 @@ const Post = ({ post }) => {
 
 
     //create mutaion for delete
-
-
     const deletemutation = useMutation((postid) => {
         return makeRequest.delete('/posts/' + postid);
-
     }, {
         onSuccess: () => {
             //invalidate and refetch data
-
-            //in useQuery our query name is posts
             queryClient.invalidateQueries(["posts"])
         }
     })
 
-    const handleLike = () => {
 
+
+    const handleLike = () => {
         mutation.mutate(data?.includes(currentUser.id))
     }
 
+    const handleOpenMenu = () => {
+        // Only show the delete button if the post owner clicks the MoreHorizOutlinedIcon
+        if (post.userid === currentUser.id) {
+            setMenuOpen(!menuOpen);
+        } else {
+            // Show an error or display a notification that only the post owner can delete
+            // console.log("Error: Only the post owner can delete.");
+            toast.error(` Hey ${currentUser.name}! you can not delete others post`)
+        }
+    }
+
     const handleDelete = () => {
-        deletemutation.mutate(post.id)
+        deletemutation.mutate(post.id);
     }
 
     //fetch data for likes
+
+
 
     return (
         <>
@@ -101,9 +103,12 @@ const Post = ({ post }) => {
                             </div>
 
                         </div>
-                        <MoreHorizOutlinedIcon onClick={() => setMenuOpen(!menuOpen)} />
+                        <MoreHorizOutlinedIcon onClick={handleOpenMenu} />
                         {menuOpen && post.userid === currentUser.id && <button onClick={handleDelete}>delete</button>}
+
+
                     </div>
+
                     <div className='content'>
                         <p>{post.postdesc}</p>
                         <img src={`http://localhost:4000/uploads/${post.img}`} alt="" />

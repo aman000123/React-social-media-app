@@ -9,7 +9,7 @@ import { makeRequest } from '../../axious'
 import { useQuery } from "@tanstack/react-query";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import Post from '../post/post';
 
 import moment from 'moment'
 
@@ -17,7 +17,7 @@ const Comment = ({ postid }) => {
 
     const { currentUser } = useContext(AuthContext)
     const [desc, setDesc] = useState("")
-
+    const [errors, setError] = useState(null);
 
     const { isLoading, error, data } = useQuery(['comments'], () =>
         makeRequest.get("/comments?postid=" + postid).then((res) => {
@@ -26,7 +26,7 @@ const Comment = ({ postid }) => {
 
 
     )
-    // console.log('data isLoadingn comment', data)
+    console.log('data isLoadingn comment', data.length)
 
     const queryClient = useQueryClient()
 
@@ -48,6 +48,11 @@ const Comment = ({ postid }) => {
 
     const handelClick = async (e) => {
         e.preventDefault();
+        if (desc.trim() === '') {
+            setError('***Please enter a comment before sending.***');
+            return;
+        }
+
         mutation.mutate({ desc, postid: postid })
         setDesc("")
 
@@ -67,7 +72,11 @@ const Comment = ({ postid }) => {
                         value={desc}
                         onChange={e => setDesc(e.target.value)} />
                     <button onClick={handelClick}>Send</button>
+
                 </div>
+                {errors && <p style={{ color: 'red' }}>{errors}</p>}
+
+
                 {isLoading ? "Loading" : data.map(comment => (
 
 
@@ -81,6 +90,8 @@ const Comment = ({ postid }) => {
                         <span className='date'>{moment(comment.createdat).fromNow()}</span>
                     </div>
                 ))}
+
+
             </div>
 
 

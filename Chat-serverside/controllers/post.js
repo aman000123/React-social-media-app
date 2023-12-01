@@ -18,32 +18,23 @@ const getPosts = (req, res) => {
         console.log(userid ? "user id exist" : "not user id fined")
         console.log('userid', userid)
 
+
+        //user josko folllow kiya hai usi ka post time line pr dikhe
+
+        //profile pr uski hi dikhe post bs
         const q = userid !== "undefined"
-
-            ?
-            `SELECT p.*, u.id AS userid, name, profilepic FROM posts AS p JOIN users AS u ON(u.id = p.userid) WHERE p.userid =?  ORDER BY p.createdAt DESC`
-
+            ? `SELECT p.*, u.id AS userid, name, profilepic FROM posts AS p JOIN users AS u ON(u.id = p.userid) WHERE p.userid =?  ORDER BY p.createdAt DESC`
             : `SELECT p.*, u.id AS userid, name, profilepic FROM posts AS p JOIN users AS u ON(u.id= p.userid)
             LEFT  JOIN relationship AS r ON (p.userid = r.foolloweduserid) WHERE  r.followeruserid=? OR p.userid=?
              ORDER BY p.createdAt DESC `
 
-
-
-
-
-
         //we use cookie inside token and user id
-
         const values = userid !== "undefined" ? [userid] : [userInfo.id, userInfo.id];
-
         db.query(q, values, (err, data) => {
             if (err) return res.status(500).json(err);
             return res.status(200).json(data)
         })
-
     })
-
-
 }
 
 
@@ -68,8 +59,6 @@ const addPost = ((req, res) => {
             req.body.img,
             userInfo.id,
             moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")
-
-
         ]
 
         db.query(q, [values], (err, data) => {

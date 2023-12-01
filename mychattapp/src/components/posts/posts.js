@@ -19,7 +19,8 @@ const Posts = ({ userid }) => {
     )
 
     //temp data 
-    console.log("data is", data)
+    // console.log("data is post===", data)
+
 
     return (
         <>

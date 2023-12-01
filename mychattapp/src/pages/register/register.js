@@ -23,15 +23,11 @@ const Register = () => {
 
         e.preventDefault();
 
-
-
-
         // Simple client-side validation
         if (!inputs.name || !inputs.email || !inputs.password || !inputs.username) {
             setErr("Please fill all fields.");
             return;
         }
-
 
         // Validate name and username fields to contain only alphabets
         const nameRegex = /^[A-Za-z]+$/;
@@ -39,7 +35,6 @@ const Register = () => {
             setErr("Name and Username should contain only alphabet characters.");
             return;
         }
-
         // Email validation using a regular expression
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(inputs.email)) {
@@ -78,7 +73,7 @@ const Register = () => {
                 <div className="card">
                     <div className="left">
                         <h1>Aman Social</h1>
-                        <p>This is my social media website. To see website plese login and go ahead Thanks </p>
+                        <p>This is my social media website. To see website please do Registration and Login and go ahead Thanks </p>
                         <span>Do you have an account?</span>
                         <Link to="/login"> <button>Login</button></Link>
 

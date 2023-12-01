@@ -119,9 +119,11 @@
 }
 
 
-input::placeholder {
-    color: #274a89;
-    font-size: 15px;
+.register {
+    ::placeholder {
+        color: #274a89;
+        font-size: 15px;
+    }
 }
 
 @media (max-width:450px) {

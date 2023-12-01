@@ -59,6 +59,11 @@
                     cursor: pointer;
                     color: white;
                 }
+
+                .MuiSvgIcon-root {
+                    cursor: pointer;
+                }
+
             }
 
             .content {
@@ -89,4 +94,6 @@
             }
         }
     }
+
+
 }

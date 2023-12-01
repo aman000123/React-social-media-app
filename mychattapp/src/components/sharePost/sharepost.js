@@ -2,10 +2,8 @@ import "./share.scss";
 import Image from "../../assets/img.png";
 import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
-
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../context/authcontext'
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axious";
 
@@ -13,17 +11,16 @@ const SharePost = () => {
     const { currentUser } = useContext(AuthContext)
     const [file, setFile] = useState(null)
     const [desc, setDesc] = useState("")
+    const [error, setError] = useState(null);
 
     const queryClient = useQueryClient()
 
     const mutation = useMutation((newPost) => {
-
         return makeRequest.post('/posts', newPost);
 
     }, {
         onSuccess: () => {
             //invalidate and refetch data
-
             //in posts.js our query name is posts
             queryClient.invalidateQueries(["posts"])
         }
@@ -48,6 +45,10 @@ const SharePost = () => {
 
     const handelClick = async (e) => {
         e.preventDefault();
+        if (desc.trim() === '') {
+            setError('***Please write something before posting.**');
+            return;
+        }
         let imgUrl = "";
         if (file) imgUrl = await upload()
         mutation.mutate({ desc, img: imgUrl })
@@ -58,7 +59,9 @@ const SharePost = () => {
 
     return (
         <div className="share">
+
             <div className="container">
+                {error && <span style={{ color: 'red' }}>{error}</span>}
                 <div className="top">
                     <div className="left">
                         <img
@@ -79,6 +82,7 @@ const SharePost = () => {
                 <div className="bottom">
                     <div className="left">
                         <input type="file" id="file" style={{ display: "none" }} onChange={(e) => setFile(e.target.files[0])} name="file" />
+
                         <label htmlFor="file">
                             <div className="item">
                                 <img src={Image} alt="" required />
@@ -96,11 +100,18 @@ const SharePost = () => {
                     </div>
                     <div className="right">
 
+
                         <button onClick={handelClick}>Share</button>
+
                     </div>
+
                 </div>
+
             </div>
+
+
         </div>
+
     );
 };
 
